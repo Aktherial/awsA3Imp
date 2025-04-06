@@ -1,13 +1,13 @@
 const express = require('express');
+const session = require('express-session');
+
+
 const { readFile, readFileSync } = require('fs');
 const path = require('path');
-const cognito = require('./cognito test');
-const database = require('./dbseed');
+// const database = require('./dbseed');
+require('dotenv').config()
 
 
-
-const express = require('express');
-const session = require('express-session');
 const { Issuer, generators } = require('openid-client');
 const app = express();
 
@@ -15,11 +15,11 @@ let client;
 
 // Initialize OpenID Client
 async function initializeClient() {
-    const issuer = await Issuer.discover(cognitoIssuer);
+    const issuer = await Issuer.discover(process.env.cognitoIssuer);
     client = new issuer.Client({
-        client_id: cognitoClientID,
+        client_id: process.env.cognitoClientID,
         client_secret: '<client secret>',
-        redirect_uris: [cognitoURL],
+        redirect_uris: [process.env.cognitoURL],
         response_types: ['code']
     });
 };
@@ -87,11 +87,11 @@ function getPathFromURL(urlString) {
     }
 }
 
-app.get(getPathFromURL('cognitoURL'), async (req, res) => {
+app.get(getPathFromURL(process.env.cognitoURL), async (req, res) => {
     try {
         const params = client.callbackParams(req);
         const tokenSet = await client.callback(
-            'cognitoURL',
+            process.env.cognitoURL,
             params,
             {
                 nonce: req.session.nonce,
@@ -114,15 +114,9 @@ app.get(getPathFromURL('cognitoURL'), async (req, res) => {
 app.get('/logout', (req, res) => {
     req.session.destroy();
     const logoutUrl = `https://<user pool domain>/logout?client_id=74pa1u1b7tvqvmhu6tqijidap9&logout_uri=<logout uri>`;
-    res.redirect(logoutUrl);
+    res.redirect(process.env.logoutUrl);
 });
 
 app.set('view engine', 'ejs');
-
-
-
-
-
 // app.use('/', express.static(path.join(__dirname, 'assets')));
-
 app.listen(process.env.PORT || 3000, () => console.log('App available on link'));
