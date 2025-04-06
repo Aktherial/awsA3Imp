@@ -4,7 +4,7 @@ const session = require('express-session');
 
 const { readFile, readFileSync } = require('fs');
 const path = require('path');
-// const database = require('./dbseed');
+const database = require('./dbseed');
 require('dotenv').config()
 
 
@@ -42,7 +42,7 @@ const checkAuth = (req, res, next) => {
 
 
 app.get('/', checkAuth, (req, res) => {
-    res.render('./index.ejs', {
+    res.render('./home.ejs', {
         isAuthenticated: req.isAuthenticated,
         userInfo: req.session.userInfo,
 
@@ -66,13 +66,13 @@ app.get('/login', (req, res) => {
 });
 
 
-app.post('/users', (req, res) => {
-  res.send(database.setDBItems());
+app.post('/items', (req, res) => {
+  database.sendDBItems(res, req);
 });
 
 
-app.get('/users', (req, res) => {
-  res.send(database.getDBItems ());
+app.get('/items', (req, res) => {
+  database.getDBItems(res, req);
 });
 
 
@@ -113,8 +113,8 @@ app.get(getPathFromURL(process.env.cognitoURL), async (req, res) => {
 // Logout route
 app.get('/logout', (req, res) => {
     req.session.destroy();
-    const logoutUrl = `https://<user pool domain>/logout?client_id=74pa1u1b7tvqvmhu6tqijidap9&logout_uri=<logout uri>`;
-    res.redirect(process.env.logoutUrl);
+    const logoutUrl = process.env.logoutUrl;
+    res.redirect(logoutUrl);
 });
 
 app.set('view engine', 'ejs');
