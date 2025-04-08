@@ -68,7 +68,10 @@
                                 <% console.log(item.price); %>
                                 <p> <b>Name:</b> <%= item.itemName %>  </p>
                                 <p> <b>Category:</b> <%= item.category %> </p>
-                                <p> <b>Name:</b> <%= item.price %> </p>
+                                <p> <b>Price:</b> <%= item.price %> </p>
+                                <form method="post" action="/add-to-cart/<%= item.itemName %>">
+                                    <button type="submit">Add to Cart</button>
+                                </form>
                             </div>
                        <% } %>
                     <% } %>
