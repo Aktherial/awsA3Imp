@@ -41,11 +41,14 @@ const checkAuth = (req, res, next) => {
 };
 
 
-app.get('/', checkAuth, (req, res) => {
-    res.render('./home.ejs', {
+app.get('/', checkAuth, async (req, res) => {
+    const results = await database.getDBItems();
+    console.log("Rending results to index.ejs");
+    res.render('./index.ejs', {
+        result: results,
         isAuthenticated: req.isAuthenticated,
         userInfo: req.session.userInfo,
-
+        
     });
 });
 
@@ -118,5 +121,5 @@ app.get('/logout', (req, res) => {
 });
 
 app.set('view engine', 'ejs');
-// app.use('/', express.static(path.join(__dirname, 'assets')));
+app.use('/', express.static(path.join(__dirname, 'assets')));
 app.listen(process.env.PORT || 3000, () => console.log('App available on link'));
