@@ -124,21 +124,39 @@ app.set('view engine', 'ejs');
 app.use('/', express.static(path.join(__dirname, 'assets')));
 app.listen(process.env.PORT || 3000, () => console.log('App available on link'));
 
-//cart placeholder
+
+//dynamoDB cart ----------------------------------------------------------------------
+const {DynamoDBClient, ListTablesCommand } = require("@aws-sdk/client-dynamodb");
+
+const user = new DynamoDBClient({
+    region:'us-east-1',
+    credentials: {
+        accessKeyId:process.env.ACCESS,
+        secretAccessKey:process.env.SECRETKEY
+    }
+});
+async function dynamoTest() {
+    const listTablesCommand = new ListTablesCommand();
+    const e = await user.send(listTablesCommand);
+    console.log({ tables: e.TableNames})
+}
+
+dynamoTest().catch(console.error);
+
+
+//cart placeholder-----------------------------------------------------------------
 let cart = [];
 
 app.post('/add-to-cart/:itemName', (req, res) => {
-    const productId = parseInt(req.params.itemName);
+    const productId = (req.params.itemName);
 
-    console.log(req.params.itemName);
+    
 
-    //cart.push({ ...product, quantity: 1 });
-    /* const productId = parseInt(req.params.id);
-    const product = products.find(p => p.id === productId);
-  
-    if (product) {
-      cart.push({ ...product, quantity: 1 });
-    }
-  
-    res.redirect('/'); */
-  });
+    //console.log(req.params.itemName);
+
+    cart.push({productId, quantity: 1 });
+    //console.log(cart);
+
+});
+
+
