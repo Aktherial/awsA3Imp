@@ -24,30 +24,47 @@
     </head>
     <body>
         <!-- HTML 5 -->
-         <header>
-            <div class="header">
-                <a class="btn btn-primary" href="/login" role="button">Login</a>
-
-                <% if (isAuthenticated) { %>
-                    <div class="leftside">
-                        <h2>Welcome, <%= userInfo.username || userInfo.email %></h2>
-                        <p>Here are some attributes you can use as a developer:</p>
-                        <p><%= JSON.stringify(userInfo, null, 4) %></p>
-                    </div>
-                    
-                    <div class="rightside">
-                        <p>Please log in to continue</p>
-                        <a class="btn btn-danger" href="/login" role="button">Sign out</a>
-                    </div>
-                <% } else { %>
-                        <div class="leftside">
-                            <p>Please log in to continue</p>
-                        </div>
-                        <div class="rightside">
-                            <a class="btn btn-primary" href="/login" role="button">Login</a>
-                        </div>
+         <header class="p-3 bg-dark text-white">
+            <div class="container">
+                <div class="container">
+                    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                        <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                          <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
+                        </a>
+                
+                        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                          <li><a href="#" class="nav-link px-2 text-secondary">Home</a></li>
+                          <li><a href="#" class="nav-link px-2 text-white">Features</a></li>
+                          <li><a href="#" class="nav-link px-2 text-white">Pricing</a></li>
+                          <li><a href="#" class="nav-link px-2 text-white">FAQs</a></li>
+                          <li><a href="#" class="nav-link px-2 text-white">About</a></li>
+                        </ul>
                         
-                <% } %>
+                        <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+                            <button class="btn btn-secondary" type="button" href="">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+                                    <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+                                </svg>
+                            </button>
+                        </form>
+                      
+
+                
+                        <div class="text-end">    
+                          <% if (isAuthenticated) { %>
+                                <h2>Welcome, <%= userInfo.username || userInfo.email %></h2>
+                                <button type="button" href="/signout" class="btn btn-outline-light me-2">Login</button>
+
+         
+                            </div>
+                            <% } else { %>
+                                <button type="button" href="/login" class="btn btn-outline-light me-2">Login</button>
+                                <button type="button" href="/signup" class="btn btn-warning">Sign-up</button>
+                            <% } %>
+                        </div>
+                      </div>
+                </div>
+
 
                 </div>
 
@@ -60,21 +77,11 @@
             <section>
             <p> This area will contain so many different shopping items</p>
             <div class="container-fluid">
-                <div class="row">
-                    <% if(result.length > 0){ %>
-                        <% for (let i = 0; i < result.length; i++) { %>
-                            <% const item = result[i]; %>
-                            <div class="storeItem col-md-2 col-sm-12">
-                                <% console.log(item.price); %>
-                                <p> <b>Name:</b> <%= item.itemName %>  </p>
-                                <p> <b>Category:</b> <%= item.category %> </p>
-                                <p> <b>Name:</b> <%= item.price %> </p>
-                            </div>
-                       <% } %>
-                    <% } %>
+                <div class="row" id="post_data">
+
 
                 </div>
-                <a class="btn btn-primary" role="button">Load more</a>
+                <a class="btn btn-primary" role="button" id="load_button">Load more</a>
 
 
         </article>
@@ -83,6 +90,6 @@
         <footer>
 
         </footer>
-        <script src="/script/script.js"></script> 
+        <script src="/script.js"></script> 
     </body>
 </html>
