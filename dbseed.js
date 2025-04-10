@@ -3,16 +3,7 @@ require('dotenv').config();
 
 
 
-// con.connect(function(err) {
-//     if (err) throw err;
 
-//     con.query('CREATE DATABASE IF NOT EXISTS main;');
-//     con.query('USE main;');
-//     con.query('CREATE TABLE IF NOT EXISTS storeItems(id int NOT NULL AUTO_INCREMENT, itemName varchar(30), category varchar(255), price int, PRIMARY KEY(id));', function(error, result, fields) {
-//         console.log(result);
-//     });
-//     // con.end();
-// });
 function sendDBItems(res, req){
 
     const con = mysql.createConnection({
@@ -36,32 +27,29 @@ function sendDBItems(res, req){
     con.end();
 }
 
-async function getDBItems(){
-    return new Promise((resolve, reject) => {
-        const con = mysql.createConnection({
-            host: process.env.HOST,
-            user: process.env.USER,
-            password: process.env.PASSWORD
-          });
+async function getDBItems(start_index, number_of_record){
+  return new Promise((resolve, reject) => {
+    const con = mysql.createConnection({
+        host: process.env.HOST,
+        user: process.env.USER,
+        password: process.env.PASSWORD
+    });
 
-
-        con.connect(err => {
-          if (err) {
-            reject(err); // Reject the promise if there's a connection error
-            return;
-          }
-          con.query(`SELECT * FROM main.storeItems`, (err, result) => {
-            con.end(); // Close the connection after the query
-            if (err) {
-              reject(err); // Reject the promise if there's a query error
-              return;
-            }
-            // results = JSON.parse(JSON.stringify(result));
-            resolve(result); // Resolve the promise with the query results
-          });
-        });
+    con.connect(err => {
+      if (err) {
+        reject(err); // Reject the promise if there's a connection error
+        return;
+      }
+      con.query(`SELECT * FROM main.storeItems LIMIT ${start_index}, ${number_of_record}`, (err, result) => {
+        con.end(); // Close the connection after the query
+        if (err) {
+          reject(err); // Reject the promise if there's a query error
+          return;
+        }
+        resolve(result); // Resolve the promise with the query results
       });
-
+    });
+  });
 }
 
 module.exports = { sendDBItems, getDBItems};
