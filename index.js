@@ -43,12 +43,13 @@ const checkAuth = (req, res, next) => {
 
 app.get('/', checkAuth, async (req, res) => {
     const results = await database.getDBItems();
+    // const stockRemain = await database.scanAllItems("Ecom-stock");
     console.log("Rending results to index.ejs");
     res.render('./index.ejs', {
         result: results,
         isAuthenticated: req.isAuthenticated,
         userInfo: req.session.userInfo,
-        
+        // stockRemain: stockRemain,
     });
 });
 
@@ -125,38 +126,20 @@ app.use('/', express.static(path.join(__dirname, 'assets')));
 app.listen(process.env.PORT || 3000, () => console.log('App available on link'));
 
 
-//dynamoDB cart ----------------------------------------------------------------------
-const {DynamoDBClient, ListTablesCommand } = require("@aws-sdk/client-dynamodb");
-
-const user = new DynamoDBClient({
-    region:'us-east-1',
-    credentials: {
-        accessKeyId:process.env.ACCESS,
-        secretAccessKey:process.env.SECRETKEY
-    }
-});
-async function dynamoTest() {
-    const listTablesCommand = new ListTablesCommand();
-    const e = await user.send(listTablesCommand);
-    console.log({ tables: e.TableNames})
-}
-
-dynamoTest().catch(console.error);
-
-
 //cart placeholder-----------------------------------------------------------------
 let cart = [];
 
 app.post('/add-to-cart/:itemName', (req, res) => {
     const productId = (req.params.itemName);
-
     
-
-    //console.log(req.params.itemName);
-
     cart.push({productId, quantity: 1 });
+    
+    database.decreaseStock(productId);
+    
+    
     //console.log(cart);
 
 });
+
 
 
