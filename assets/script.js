@@ -35,9 +35,17 @@ function load_data(){
             {   
                 for(var i = 0; i < results.length; i++){
                     const item = results[i]; 
+                    var url;
+                    if(item.image_path == null){
+                        url = "https://elasticbeanstalk-us-east-1-930627110385.s3.us-east-1.amazonaws.com/images/na.jpg";
+                    }
+                    else{
+                        url = item.image_path;
+                    }
 
                     html += `
                     <div class="storeItem col-md-2 col-sm-12">
+                        <img src=` + url +  ` alt=` + item.itemName + ` width="100%" height="30%"> 
                         <p> <b>Name:</b> ` + item.itemName + `</p>
                         <p> <b>Category:</b> ` + item.category + `</p>
                         <p> <b>Name:</b>` +  item.price + `</p>
