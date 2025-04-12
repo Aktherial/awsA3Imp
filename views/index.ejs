@@ -72,14 +72,17 @@
                                 <form method="post" action="/add-to-cart/<%= item.itemName %>">
                                     <button type="submit">Add to Cart</button>
                                 </form>
+                                <% for (const stockItem of stockRemain.Items) { %>
+                                    <% if (stockItem.itemID == item.itemName) { %>
+                                        <b>Stock: </b> <%= stockItem.quantity %>
+                                    <% } %>
+                                <% } %>
                             </div>
                        <% } %>
                     <% } %>
 
                 </div>
                 <a class="btn btn-primary" role="button">Load more</a>
-
-
         </article>
 
 

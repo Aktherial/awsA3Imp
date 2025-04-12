@@ -148,33 +148,20 @@ async function decreaseStock(name) {
 }
 
 async function scanAllItems(tableName) {
-//   let data = [];
-//   let ExclusiveStartKey;
+  let data = [];
+  let ExclusiveStartKey;
 
-//   do {
-//     const params = {
-//       TableName: tableName,
-//       ExclusiveStartKey, // undefined on first call
-//     };
+  do {
+    const params = {
+      TableName: tableName,
+      ExclusiveStartKey, // undefined on first call
+    };
 
-//     data = await ddbDocClient.send(new ScanCommand(params));
-//     // Convert raw DynamoDB format to plain JSON
-//     //logging for unmarshall
-// /*     for (const item of data.Items) {
-//       if (!item.quantity || (!item.quantity.N && !item.quantity.S)) {
-//         console.warn("Potentially invalid quantity field found:", JSON.stringify(item));
-//       }
-//     }
-    
-//     if (stockItem.itemID.S == item.itemName) { stockItem.quantity.N }
-//     //const parsedItems = data.Items.map((item) => unmarshall(item));
-//     items = items.concat(parsedItems); */
-//     ExclusiveStartKey = data.LastEvaluatedKey;
-//   } while (ExclusiveStartKey);
+    data = await ddbDocClient.send(new ScanCommand(params));
+    ExclusiveStartKey = data.LastEvaluatedKey;
+  } while (ExclusiveStartKey);
 
-
-
-//   return data;
+  return data;
 }
 
 

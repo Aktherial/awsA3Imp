@@ -43,13 +43,14 @@ const checkAuth = (req, res, next) => {
 
 app.get('/', checkAuth, async (req, res) => {
     const results = await database.getDBItems();
-    // const stockRemain = await database.scanAllItems("Ecom-stock");
+    const stockRemain = await database.scanAllItems("Ecom-stock");
+
     console.log("Rending results to index.ejs");
     res.render('./index.ejs', {
         result: results,
         isAuthenticated: req.isAuthenticated,
         userInfo: req.session.userInfo,
-        // stockRemain: stockRemain,
+        stockRemain: stockRemain,
     });
 });
 
