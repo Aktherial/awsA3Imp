@@ -53,13 +53,18 @@
                         <div class="text-end">    
                           <% if (isAuthenticated) { %>
                                 <h2>Welcome, <%= userInfo.username || userInfo.email %></h2>
-                                <button type="button" href="/signout" class="btn btn-outline-light me-2">Login</button>
+                                
+                                <button type="button" href="/logout" class="btn btn-outline-light me-2">Logout</button>
+                                <a href="/logout">Logout</a>
 
          
                             </div>
                             <% } else { %>
+                                <h2>Welcome, and DIE</h2>
+                                <a href="/login">Login</a>
+                                <a href="/logout">logout</a>
+
                                 <button type="button" href="/login" class="btn btn-outline-light me-2">Login</button>
-                                <button type="button" href="/signup" class="btn btn-warning">Sign-up</button>
                             <% } %>
                         </div>
                       </div>
@@ -70,10 +75,7 @@
 
          </header>
         <article>
-
-           
                 
-
             <section>
             <p> This area will contain so many different shopping items</p>
             <div class="container-fluid">

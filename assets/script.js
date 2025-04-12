@@ -30,7 +30,6 @@ function load_data(){
            
 
             let html = '';
-            console.log(results)
             if(results.length > 0)
             {   
                 for(var i = 0; i < results.length; i++){
@@ -55,7 +54,6 @@ function load_data(){
 
                     start_index++;
 
-                    console.log(start_index);
         
                 };
 
