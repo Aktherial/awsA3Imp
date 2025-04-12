@@ -27,7 +27,8 @@ article{
 }
 
 .storeItem{
-    height:10vw;
+    height:auto;
+    width: auto;
     margin: 10px;
     border-style: outset; border-width: 5px; border-color:rgb(173, 171, 24);
 }
@@ -38,4 +39,7 @@ article{
 
 .button-container a {
     margin: 5px;
+}
+.storeItem p{
+    margin-bottom: 0.5rem;
 }
