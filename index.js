@@ -45,7 +45,7 @@ app.get('/', checkAuth, async (req, res) => {
     const results = await database.getDBItems();
     const stockRemain = await database.scanAllItems("Ecom-stock");
 
-    console.log("Rending results to index.ejs");
+    console.log("Rendering results to index.ejs");
     res.render('./index.ejs', {
         result: results,
         isAuthenticated: req.isAuthenticated,
@@ -126,21 +126,26 @@ app.set('view engine', 'ejs');
 app.use('/', express.static(path.join(__dirname, 'assets')));
 app.listen(process.env.PORT || 3000, () => console.log('App available on link'));
 
-
-//cart placeholder-----------------------------------------------------------------
-let cart = [];
+let mapCart = new Map();
 
 app.post('/add-to-cart/:itemName', (req, res) => {
     const productId = (req.params.itemName);
-    
-    cart.push({productId, quantity: 1 });
-    
+        
+    if ( mapCart.has(productId) ) {
+        mapCart.set( productId, mapCart.get( productId ) + 1) ;
+    } else {
+        mapCart.set( productId, 1) ;
+    }
+
+    console.log(mapCart);
     database.decreaseStock(productId);
-    
-    
-    //console.log(cart);
+    res.redirect('/');
 
 });
 
-
-
+app.get('/cart', checkAuth, async (req, res) => {
+    res.render('./cart.ejs', {
+        cart:mapCart,
+        isAuthenticated: req.isAuthenticated,
+    });
+});

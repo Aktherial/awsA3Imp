@@ -84,14 +84,11 @@ const ddbDocClient = DynamoDBDocumentClient.from(user);
 async function dynamoSetup() {
   const listTablesCommand = new ListTablesCommand();
   const e = await user.send(listTablesCommand);
-  console.log({ tables: e.TableNames})
-
 
   //put data into the table 
 
   getDBItems();
   const stockLvl = await getDBItems();
-  //console.log(result)
 
   if(stockLvl.length > 0){ 
       for (let i = 0; i < stockLvl.length; i++) { 
@@ -109,7 +106,6 @@ async function dynamoSetup() {
               }
           });
           await user.send(putItemCommand);
-          console.log(name)     
       } 
   } 
 }
