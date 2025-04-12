@@ -142,6 +142,7 @@ app.get('/cart', checkAuth, async (req, res) => {
     res.render('./cart.ejs', {
         cart:mapCart,
         isAuthenticated: req.isAuthenticated,
+        userInfo: req.session.userInfo,
     });
 });
 
