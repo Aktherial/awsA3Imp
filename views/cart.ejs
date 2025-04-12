@@ -21,16 +21,22 @@
 
         <title> Cart </title>
     </head>
-<body>
-<div>
-    <p> Cart </p>
-        <% cart.forEach((quant, name) => { %>
+    <body>
+        <%- include('header'); -%>
+        <article>
             <div>
-                <p> <b>Name:</b> <%= name %>  </p>
-                <p> <b>Count:</b> <%= quant %>  </p>
-
+                <p> Cart </p>
+                    <% cart.forEach((quant, name) => { %>
+                        <div>
+                            <p> <b>Name:</b> <%= name %>  </p>
+                            <p> <b>Count:</b> <%= quant %>  </p>
+    
+                        </div>
+                <% }) %>
             </div>
-       <% }) %>
-</div>
-</body>
+        </article>
+        <%- include('footer'); -%>
+    </body>
+     
+        
 </html>

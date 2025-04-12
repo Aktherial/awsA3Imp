@@ -1,20 +1,16 @@
-html{
-    margin-left: 10vw;
-    margin-right: 10vw;
-    padding-top:5px;
-    background-color: bisque;
-}
+body{
 
+    background-color:rgb(194, 191, 187);
 
-.header{
-    background-color:azure;
 }
 
 .leftside{
     text-align: left;
     display:inline-block
 }
-
+footer{
+    color: white !important; 
+}
 .rightside{
     float: right;
     text-align: right;
@@ -22,8 +18,11 @@ html{
 }
 
 article{
-    padding: 1vw;
-    background-color:antiquewhite;
+
+    padding-left: 10vw;
+    padding-right: 10vw;
+
+    background: linear-gradient(to right, rgba(0, 0, 0, 0), rgb(194, 191, 187, 1) 10% ,  rgb(194, 191, 187, 1) 90%, rgba(0, 0, 0, 0));
 }
 
 .storeItem{

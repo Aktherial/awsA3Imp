@@ -1,32 +1,6 @@
 const mysql = require('mysql');
 require('dotenv').config();
 
-
-
-
-// function sendDBItems(res, req){
-
-//     const con = mysql.createConnection({
-//         host: process.env.HOST,
-//         user: process.env.USER,
-//         password: process.env.PASSWORD
-//     });
-
-//     if (req.query.itemName && req.query.category && req.query.price) {
-//         console.log('Request received');
-//         con.connect(function(err) {
-//             con.query(`INSERT INTO main.storeItems (itemName, category, price) VALUES ('${req.query.itemName}', '${req.query.category}', '${req.query.price}')`, function(err, result, fields) {
-//                 console.log(err);
-//                 if (err) return(err);
-//                 if (result) return({itemName: req.query.itemName, category: req.query.category, price: req.query.price});
-//             });
-//         });
-//     } else {
-//         console.log('Missing a parameter');
-//     }
-//     con.end();
-// }
-
 async function getDBItems(start_index, number_of_record){
   return new Promise((resolve, reject) => {
     const con = mysql.createConnection({
@@ -101,7 +75,7 @@ dynamoSetup ();
 
 //read stock lvl from dynamo then decrease by 1 and reupload 
 async function decreaseStock(name) {
-  console.log (name);
+  // console.log (name);
   const getItemCommand = new GetItemCommand({
     TableName: "Ecom-stock",
     Key: {
@@ -113,7 +87,7 @@ async function decreaseStock(name) {
   const response = await user.send(getItemCommand);
   const newQuan = parseInt(response.Item.quantity.N) - 1;
   const dbNew = newQuan.toString();
-  console.log(newQuan);
+  // console.log(newQuan);
 
 
   //const stock = response.Item.quantity

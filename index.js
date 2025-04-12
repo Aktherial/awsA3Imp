@@ -37,12 +37,6 @@ const checkAuth = (req, res, next) => {
 
 
 app.get('/', checkAuth, async (req, res) => {
-    //const results = await database.getDBItems();
-    //const stockRemain = await database.scanAllItems("Ecom-stock");
-    console.log(req.isAuthenticated);
-    console.log(req.session.userInfo);
-    console.log("-----------");
-    console.log(req.session)
     console.log("Rendering results to index.ejs");
     res.render('index', {
         //result: results,
@@ -116,8 +110,6 @@ app.get(getPathFromURL(process.env.cognitoURL), async (req, res) => {
     }
 });
 
-
-// Logout route
 // Logout route
 app.get('/logout', (req, res) => {
     req.session.destroy();
@@ -127,9 +119,7 @@ app.get('/logout', (req, res) => {
 
 
 
-app.set('view engine', 'ejs');
-app.use('/', express.static(path.join(__dirname, 'assets')));
-app.listen(process.env.PORT || 3000, () => console.log('App available on http://localhost:3000'));
+
 
 let mapCart = new Map();
 
@@ -154,3 +144,8 @@ app.get('/cart', checkAuth, async (req, res) => {
         isAuthenticated: req.isAuthenticated,
     });
 });
+
+
+app.set('view engine', 'ejs');
+app.use('/', express.static(path.join(__dirname, 'assets')));
+app.listen(process.env.PORT || 3000, () => console.log('App available on http://localhost:3000'));
