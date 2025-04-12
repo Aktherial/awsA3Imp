@@ -26,8 +26,9 @@ function load_data(){
         req.open('GET', `/get_data?start_index=${start_index}&num_record=${number_of_record}`);
 
         req.onload = () => {
-            const results = JSON.parse(req.responseText);
-           
+            const sentData = JSON.parse(req.responseText);
+           const results = sentData.results;
+           const stockRemain = sentData.stockRemain;
 
             let html = '';
             if(results.length > 0)
@@ -47,8 +48,16 @@ function load_data(){
                         <img src=` + url +  ` alt=` + item.itemName + ` width="100%" height="30%"> 
                         <p> <b>Name:</b> ` + item.itemName + `</p>
                         <p> <b>Category:</b> ` + item.category + `</p>
-                        <p> <b>Name:</b>` +  item.price + `</p>
-                        <button type="button" href="" class="btn btn-success">Add To Cart</button>
+                        <p> <b>Price:</b>` +  item.price + `</p>`
+
+                        for (const stockItem of stockRemain.Items) { 
+                            if (stockItem.itemID == item.itemName) {
+                                html += `<b>Stock: </b>`+ stockItem.quantity
+                            } 
+                        } 
+                        html += `<form method="post" action="/add-to-cart/`+item.itemName+`">
+                                    <button class="btn btn-success" type="submit">Add to Cart</button>
+                                </form>
 
                     </div>`
 

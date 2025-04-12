@@ -35,14 +35,20 @@ const checkAuth = (req, res, next) => {
     next();
 };
 
-app.get('/', checkAuth, (req, res) => {
+
+app.get('/', checkAuth, async (req, res) => {
+    //const results = await database.getDBItems();
+    //const stockRemain = await database.scanAllItems("Ecom-stock");
     console.log(req.isAuthenticated);
     console.log(req.session.userInfo);
     console.log("-----------");
     console.log(req.session)
+    console.log("Rendering results to index.ejs");
     res.render('index', {
+        //result: results,
         isAuthenticated: req.isAuthenticated,
-        userInfo: req.session.userInfo
+        userInfo: req.session.userInfo,
+        //stockRemain: stockRemain,
     });
 });
 
@@ -50,8 +56,12 @@ app.get("/get_data", async (req, res) => {
     const start_index = req.query.start_index;
     const number_of_record = req.query.num_record;
     const results = await database.getDBItems(start_index, number_of_record);
-    console.log
-    res.json(results);
+    const stockRemain = await database.scanAllItems("Ecom-stock");
+
+    res.json({
+        results:results,
+        stockRemain:stockRemain
+    });
 });
 
 // Helper function to get the path from the URL. Example: "http://localhost/hello" returns "/hello"
@@ -120,3 +130,27 @@ app.get('/logout', (req, res) => {
 app.set('view engine', 'ejs');
 app.use('/', express.static(path.join(__dirname, 'assets')));
 app.listen(process.env.PORT || 3000, () => console.log('App available on http://localhost:3000'));
+
+let mapCart = new Map();
+
+app.post('/add-to-cart/:itemName', (req, res) => {
+    const productId = (req.params.itemName);
+        
+    if ( mapCart.has(productId) ) {
+        mapCart.set( productId, mapCart.get( productId ) + 1) ;
+    } else {
+        mapCart.set( productId, 1) ;
+    }
+
+    console.log(mapCart);
+    database.decreaseStock(productId);
+    res.redirect('/');
+
+});
+
+app.get('/cart', checkAuth, async (req, res) => {
+    res.render('./cart.ejs', {
+        cart:mapCart,
+        isAuthenticated: req.isAuthenticated,
+    });
+});

@@ -2,7 +2,6 @@ html{
     margin-left: 10vw;
     margin-right: 10vw;
     padding-top:5px;
-
     background-color: bisque;
 }
 
@@ -17,7 +16,7 @@ html{
 }
 
 .rightside{
-    float:right;
+    float: right;
     text-align: right;
     display:inline-block
 }
@@ -34,6 +33,13 @@ article{
     border-style: outset; border-width: 5px; border-color:rgb(173, 171, 24);
 }
 
+.button-container {
+    display: flex;
+  }
+
+.button-container a {
+    margin: 5px;
+}
 .storeItem p{
     margin-bottom: 0.5rem;
 }
