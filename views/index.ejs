@@ -65,20 +65,27 @@
                         <% for (let i = 0; i < result.length; i++) { %>
                             <% const item = result[i]; %>
                             <div class="storeItem col-md-2 col-sm-12">
-                                <% console.log(item.price); %>
                                 <p> <b>Name:</b> <%= item.itemName %>  </p>
                                 <p> <b>Category:</b> <%= item.category %> </p>
                                 <p> <b>Price:</b> <%= item.price %> </p>
                                 <form method="post" action="/add-to-cart/<%= item.itemName %>">
                                     <button type="submit">Add to Cart</button>
                                 </form>
+                                <% for (const stockItem of stockRemain.Items) { %>
+                                    <% if (stockItem.itemID == item.itemName) { %>
+                                        <b>Stock: </b> <%= stockItem.quantity %>
+                                    <% } %>
+                                <% } %>
                             </div>
                        <% } %>
                     <% } %>
 
                 </div>
-                <a class="btn btn-primary" role="button">Load more</a>
-
+                <div class="button-container">
+                    <a class="btn btn-primary" role="button">Load more</a>
+                    <a class="btn btn-primary" role="button" href="/cart">View Cart</a>
+                </div>
+                
 
         </article>
 

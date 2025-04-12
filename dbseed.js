@@ -63,5 +63,103 @@ async function getDBItems(){
       });
 
 }
+//--------------------------dynamo db------------------------------------------------
+const {DynamoDBClient, ListTablesCommand, PutItemCommand, GetItemCommand} = require("@aws-sdk/client-dynamodb");
+const {DynamoDBDocumentClient, ScanCommand} = require("@aws-sdk/lib-dynamodb");
+const { unmarshall } = require("@aws-sdk/util-dynamodb");
 
-module.exports = { sendDBItems, getDBItems};
+
+
+const user = new DynamoDBClient({
+    region:'us-east-1',
+    credentials: {
+        accessKeyId:process.env.ACCESS,
+        secretAccessKey:process.env.SECRETKEY
+    }
+});
+
+const ddbDocClient = DynamoDBDocumentClient.from(user);
+
+
+async function dynamoSetup() {
+  const listTablesCommand = new ListTablesCommand();
+  const e = await user.send(listTablesCommand);
+
+  //put data into the table 
+
+  getDBItems();
+  const stockLvl = await getDBItems();
+
+  if(stockLvl.length > 0){ 
+      for (let i = 0; i < stockLvl.length; i++) { 
+          const name = stockLvl[i].itemName; 
+
+          const putItemCommand = new PutItemCommand({
+              TableName: 'Ecom-stock',
+              Item: {
+                  itemID:{
+                      "S": name
+                  },
+                  quantity:{
+                      "N": "99"
+                  }
+              }
+          });
+          await user.send(putItemCommand);
+      } 
+  } 
+}
+dynamoSetup ();
+
+//read stock lvl from dynamo then decrease by 1 and reupload 
+async function decreaseStock(name) {
+  console.log (name);
+  const getItemCommand = new GetItemCommand({
+    TableName: "Ecom-stock",
+    Key: {
+      "itemID" : {
+        "S" : name
+      }
+    }
+  });
+  const response = await user.send(getItemCommand);
+  const newQuan = parseInt(response.Item.quantity.N) - 1;
+  const dbNew = newQuan.toString();
+  console.log(newQuan);
+
+
+  //const stock = response.Item.quantity
+  const putItemCommand = new PutItemCommand({
+    TableName: 'Ecom-stock',
+    Item: {
+        itemID:{
+            "S": name
+        },
+        quantity:{
+            "N": dbNew
+        }
+    }
+  });
+  await user.send(putItemCommand);
+}
+
+async function scanAllItems(tableName) {
+  let data = [];
+  let ExclusiveStartKey;
+
+  do {
+    const params = {
+      TableName: tableName,
+      ExclusiveStartKey, // undefined on first call
+    };
+
+    data = await ddbDocClient.send(new ScanCommand(params));
+    ExclusiveStartKey = data.LastEvaluatedKey;
+  } while (ExclusiveStartKey);
+
+  return data;
+}
+
+
+
+module.exports = { sendDBItems, getDBItems, dynamoSetup, decreaseStock, scanAllItems};

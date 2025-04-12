@@ -2,7 +2,6 @@ html{
     margin-left: 10vw;
     margin-right: 10vw;
     padding-top:5px;
-
     background-color: bisque;
 }
 
@@ -31,4 +30,12 @@ article{
     height:10vw;
     margin: 10px;
     border-style: outset; border-width: 5px; border-color:rgb(173, 171, 24);
+}
+
+.button-container {
+    display: flex;
+  }
+
+.button-container a {
+    margin: 5px;
 }

@@ -43,12 +43,14 @@ const checkAuth = (req, res, next) => {
 
 app.get('/', checkAuth, async (req, res) => {
     const results = await database.getDBItems();
-    console.log("Rending results to index.ejs");
+    const stockRemain = await database.scanAllItems("Ecom-stock");
+
+    console.log("Rendering results to index.ejs");
     res.render('./index.ejs', {
         result: results,
         isAuthenticated: req.isAuthenticated,
         userInfo: req.session.userInfo,
-        
+        stockRemain: stockRemain,
     });
 });
 
@@ -124,21 +126,26 @@ app.set('view engine', 'ejs');
 app.use('/', express.static(path.join(__dirname, 'assets')));
 app.listen(process.env.PORT || 3000, () => console.log('App available on link'));
 
-//cart placeholder
-let cart = [];
+let mapCart = new Map();
 
 app.post('/add-to-cart/:itemName', (req, res) => {
-    const productId = parseInt(req.params.itemName);
-
-    console.log(req.params.itemName);
-
-    //cart.push({ ...product, quantity: 1 });
-    /* const productId = parseInt(req.params.id);
-    const product = products.find(p => p.id === productId);
-  
-    if (product) {
-      cart.push({ ...product, quantity: 1 });
+    const productId = (req.params.itemName);
+        
+    if ( mapCart.has(productId) ) {
+        mapCart.set( productId, mapCart.get( productId ) + 1) ;
+    } else {
+        mapCart.set( productId, 1) ;
     }
-  
-    res.redirect('/'); */
-  });
+
+    console.log(mapCart);
+    database.decreaseStock(productId);
+    res.redirect('/');
+
+});
+
+app.get('/cart', checkAuth, async (req, res) => {
+    res.render('./cart.ejs', {
+        cart:mapCart,
+        isAuthenticated: req.isAuthenticated,
+    });
+});
