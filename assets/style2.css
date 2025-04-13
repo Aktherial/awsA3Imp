@@ -42,3 +42,8 @@ article{
 .storeItem p{
     margin-bottom: 0.5rem;
 }
+
+.footer-spacer {
+    height: 80px;
+    background-color: #212529;
+}

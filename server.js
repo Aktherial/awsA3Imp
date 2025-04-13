@@ -139,11 +139,40 @@ app.post('/add-to-cart/:itemName', (req, res) => {
 });
 
 app.get('/cart', checkAuth, async (req, res) => {
+    const cartItems = [];
+
+    // Get all item details from MySQL
+    const allItems = await database.getDBItems(0, 1000);
+
+    // Turn item list into a map for quick access
+    const itemLookup = new Map();
+    for (const item of allItems) {
+        itemLookup.set(item.itemName, item.price); // assuming your MySQL table has 'price' column
+    }
+
+    // Prepare detailed cart data with price info
+    for (const [itemName, quantity] of mapCart.entries()) {
+        const price = itemLookup.get(itemName) || 0;
+        const totalPrice = price * quantity;
+        cartItems.push({
+            name: itemName,
+            quantity: quantity,
+            price: price,
+            totalPrice: totalPrice
+        });
+    }
+
     res.render('./cart.ejs', {
-        cart:mapCart,
+        cart: cartItems,
         isAuthenticated: req.isAuthenticated,
         userInfo: req.session.userInfo,
     });
+});
+
+app.post('/submit-cart', (req, res) => {
+    mapCart.clear(); 
+
+    res.redirect('/');
 });
 
 

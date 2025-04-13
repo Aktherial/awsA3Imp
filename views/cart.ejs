@@ -1,42 +1,64 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <!-- <link rel="icon" type="image/x-icon" href="favicon.ico"> -->
-     
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/style2.css" rel="stylesheet" type="text/css"/>
 
-
-        <link href="/style2.css" rel="stylesheet" type="text/css"/>
-
-        <link rel="stylesheet"z
+    <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
         crossorigin="anonymous">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
         integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
         crossorigin="anonymous"></script>
 
+    <title>Cart</title>
+</head>
+<body>
+    <%- include('header'); -%>
 
-        <title> Cart </title>
-    </head>
-    <body>
-        <%- include('header'); -%>
-        <article>
-            <div>
-                <p> Cart </p>
-                    <% cart.forEach((quant, name) => { %>
-                        <div>
-                            <p> <b>Name:</b> <%= name %>  </p>
-                            <p> <b>Count:</b> <%= quant %>  </p>
+    <article class="container mt-5">
+        <h2>Cart</h2>
     
-                        </div>
-                <% }) %>
-            </div>
-        </article>
-        <%- include('footer'); -%>
-    </body>
-     
-        
+        <% if (cart.length > 0) { %>
+            <form action="/submit-cart" method="POST">
+                <table class="table table-bordered table-striped mt-3">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Item Name</th>
+                            <th>Quantity</th>
+                            <th>Unit Price ($)</th>
+                            <th>Total ($)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% cart.forEach(item => { %>
+                            <tr>
+                                <td><%= item.name %></td>
+                                <td><%= item.quantity %></td>
+                                <td><%= item.price.toFixed(2) %></td>
+                                <td><%= item.totalPrice.toFixed(2) %></td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="3">Grand Total</th>
+                            <th>
+                                $<%= cart.reduce((sum, item) => sum + item.totalPrice, 0).toFixed(2) %>
+                            </th>
+                        </tr>
+                    </tfoot>
+                </table>
+                <button type="submit" class="btn btn-success mt-3">Submit Order</button>
+            </form>
+        <% } else { %>
+            <p class="mt-3">Your cart is empty.</p>
+        <% } %>
+    </article>
+
+    <%- include('footer'); -%>
+</body>
 </html>
